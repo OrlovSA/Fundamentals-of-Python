@@ -39,19 +39,6 @@ class Loto():
         return f'{self.name}{result}---------Баллы: {self.card_nums.count("--")}/15 ---------'
 
 
-def input_check():
-    x = ['y', 'n']
-    while True:
-        try:
-            i = str(input('Зачеркнуть цифру? (y/n)\n')).lower()
-            if i not in x:
-                print('неверный ввод.')
-            else:
-                return i
-        except:
-            print('введите букву.')
-
-
 class Game:
     def __init__(self, user, comp, nums):
         self.user = user
@@ -59,33 +46,45 @@ class Game:
         self.nums = nums
 
     @property
-    def game_start(self):
-        for i, num in enumerate(nums.kegs, 1):
-            print(f'Новый бочонок: {num} (осталось {90-i})')
-            print(comp.card)
-            print(user.card)
+    def input_check(self):
+        x = ['y', 'n']
+        while True:
+            try:
+                i = str(input('Зачеркнуть цифру? (y/n)\n')).lower()
+                if i not in x:
+                    print('неверный ввод.')
+                else:
+                    return i
+            except:
+                print('введите букву.')
 
-            if num in comp.card_nums:
-                comp.card_nums.insert(comp.card_nums.index(num), '--')
-                comp.card_nums.remove(num)
-            if comp.card_nums.count('--') == 15:
+    def game_start(self):
+        for i, num in enumerate(self.nums.kegs, 1):
+            print(f'Новый бочонок: {num} (осталось {90-i})')
+            print(self.comp.card)
+            print(self.user.card)
+
+            if num in self.comp.card_nums:
+                self.comp.card_nums.insert(self.comp.card_nums.index(num), '--')
+                self.comp.card_nums.remove(num)
+            if self.comp.card_nums.count('--') == 15:
                 print('Карточка компьютера Победила!\nВы проиграли!')
                 break
 
-            input_user = input_check()
+            input_user = self.input_check
             if input_user =='y':
-                if num in user.card_nums:
-                    user.card_nums.insert(user.card_nums.index(num), '--')
-                    user.card_nums.remove(num)
+                if num in self.user.card_nums:
+                    self.user.card_nums.insert(self.user.card_nums.index(num), '--')
+                    self.user.card_nums.remove(num)
                     print('Верно')
                 else:
-                    print(f'Цифрв в вашей карте отсутствует!\n{user.card}\nВы проиграли!')
+                    print(f'Цифрв в вашей карте отсутствует!\n{self.user.card}\nВы проиграли!')
                     break
             if input_user == 'n':
-                if num in user.card_nums:
-                    print(f'Цифра в вашей карте была!\n{user.card}\nВы проиграли!')
+                if num in self.user.card_nums:
+                    print(f'Цифра в вашей карте была!\n{self.user.card}\nВы проиграли!')
                     break
-            if user.card_nums.count('--') == 15:
+            if self.user.card_nums.count('--') == 15:
                 print('Ваша Карточка Победила!')
                 break
         return 'Игра закончина!'
@@ -95,4 +94,4 @@ nums = Kegs()
 comp = Loto(nums.kegs_comp, '-- Карточка компьютера ---\n', 0, 15)
 user = Loto(nums.kegs_user, '------ Ваша карточка -----\n', 15, 30)
 game = Game(user, comp, nums)
-game.game_start
+game.game_start()
